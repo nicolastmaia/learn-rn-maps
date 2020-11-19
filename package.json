@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-		"start": "react-native start",
-		"run_emulator": "C:/Users/nicol/AppData/Local/Android/Sdk/tools/emulator.exe -avd My_Custom_Phone",
-		"install_dependencies": "npm i",
-		"install_on_device": "react-native run-android",
-		"connect_to_reactotron": "adb reverse tcp:9090 tcp:9090",
-		"clean_gradlew_cache": "cd android && gradlew clean && cd..",
-		"developer_menu": "adb shell input keyevent 82",
-		"test": "jest",
-		"lint": "eslint ."
+    "start": "react-native start",
+    "run_emulator": "C:/Users/nicol/AppData/Local/Android/Sdk/tools/emulator.exe -avd My_Custom_Phone",
+    "install_dependencies": "npm i",
+    "install_on_device": "react-native run-android",
+    "connect_to_reactotron": "adb reverse tcp:9090 tcp:9090",
+    "clean_gradlew_cache": "cd android && gradlew clean && cd..",
+    "developer_menu": "adb shell input keyevent 82",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.63.3",
-    "react-native-maps": "0.27.1"
+    "react-native-maps": "^0.27.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
