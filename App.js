@@ -13,7 +13,7 @@ const App = () => {
 
   const toggleEditing = () => {
     setEditing((prevState) => !prevState);
-    setRemove(false)
+    setRemove(false);
   };
 
   const toggleRemove = () => {
@@ -116,7 +116,7 @@ const App = () => {
           style={{position: 'absolute', bottom: 5, left: 5}}
           onPress={toggleRemove}>
           <Icon type="Ionicons" name="trash-outline" />
-          <Text>Remove: {remove?"ON":"OFF"}</Text>
+          <Text>Remove: {remove ? 'ON' : 'OFF'}</Text>
         </Button>
       ) : (
         <></>
