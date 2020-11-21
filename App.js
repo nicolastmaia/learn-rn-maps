@@ -44,6 +44,7 @@ const App = () => {
   const renderMarker = (marker) => {
     return (
       <Marker
+        pinColor = 'green'
         key={marker.key}
         draggable
         coordinate={marker.coordinate}
@@ -100,6 +101,7 @@ const App = () => {
           <></>
         )}
       </MapView>
+      
       <Button
         success
         style={{position: 'absolute', bottom: 5, right: 5}}
