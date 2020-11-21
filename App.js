@@ -9,7 +9,7 @@ const App = () => {
   const [editing, setEditing] = useState(false);
   const [remove, setRemove] = useState(false);
   const [markers, setMarkers] = useState([]);
-  const [polygonCoords, setPolygonCoords] = useState([]);
+  const [polygonCoordinate, setPolygonCoordinate] = useState([]);
 
   const toggleEditing = () => {
     setEditing((prevState) => !prevState);
@@ -18,18 +18,6 @@ const App = () => {
 
   const toggleRemove = () => {
     setRemove((prevState) => !prevState);
-  };
-
-  const removeMarker = (markerKey) => {
-    if (remove) {
-      let markersUpdated = markers.filter((marker) => {
-        return marker.key != markerKey;
-      });
-      markersUpdated.sort(function (a, b) {
-        return a.key - b.key;
-      });
-      setMarkers(markersUpdated);
-    }
   };
 
   const createMarker = (coordinate) => {
@@ -44,39 +32,51 @@ const App = () => {
   const renderMarker = (marker) => {
     return (
       <Marker
-        pinColor = 'green'
+        pinColor="green"
         key={marker.key}
         draggable
         coordinate={marker.coordinate}
         title={`${marker.key}`}
         onPress={() => removeMarker(marker.key)}
         onDragEnd={(e) => {
-          updateMarkerCoord(marker.key, e.nativeEvent.coordinate);
+          updateMarkerCoordinate(marker.key, e.nativeEvent.coordinate);
         }}></Marker>
     );
   };
 
-  const updateMarkerCoord = (markerKey, coordinate) => {
-    let markersUpdated = markers.filter((marker) => {
+  const updateMarkerCoordinate = (markerKey, coordinate) => {
+    let editedMarkersArray = markers.filter((marker) => {
       return marker.key != markerKey;
     });
-    markersUpdated.push({key: markerKey, coordinate});
-    markersUpdated.sort(function (a, b) {
+    editedMarkersArray.push({key: markerKey, coordinate});
+    editedMarkersArray.sort(function (a, b) {
       return a.key - b.key;
     });
-    setMarkers(markersUpdated);
+    setMarkers(editedMarkersArray);
   };
 
-  const fetchCoordinatesFromMarkers = () => {
-    setPolygonCoords([]);
+    const removeMarker = (markerKey) => {
+      if (remove) {
+        let editedMarkersArray = markers.filter((marker) => {
+          return marker.key != markerKey;
+        });
+        editedMarkersArray.sort(function (a, b) {
+          return a.key - b.key;
+        });
+        setMarkers(editedMarkersArray);
+      }
+    };
+
+  const fetchCoordinateFromMarkers = () => {
+    setPolygonCoordinate([]);
     markers.map((marker) => {
       const {coordinate} = marker;
-      setPolygonCoords((prevState) => [...prevState, coordinate]);
+      setPolygonCoordinate((prevState) => [...prevState, coordinate]);
     });
   };
 
   useEffect(() => {
-    fetchCoordinatesFromMarkers();
+    fetchCoordinateFromMarkers();
   }, [markers]);
 
   return (
@@ -92,36 +92,31 @@ const App = () => {
         }}
         onLongPress={(e) => createMarker(e.nativeEvent.coordinate)}>
         {editing ? markers.map((marker) => renderMarker(marker)) : <></>}
-        {polygonCoords.length > 0 ? (
+        {polygonCoordinate.length > 0 ? (
           <Polygon
-            coordinates={polygonCoords}
+            coordinates={polygonCoordinate}
             fillColor="rgba(255, 138, 138, 0.5)"
           />
         ) : (
           <></>
         )}
       </MapView>
-      
-      <Button
-        success
-        style={{position: 'absolute', bottom: 5, right: 5}}
-        onPress={toggleEditing}>
-        {editing ? (
-          <Icon type="Ionicons" name="checkmark-outline" />
-        ) : (
-          <Icon type="Ionicons" name="golf-outline" />
-        )}
-      </Button>
       {editing ? (
-        <Button
-          danger
-          style={{position: 'absolute', bottom: 5, left: 5}}
-          onPress={toggleRemove}>
-          <Icon type="Ionicons" name="trash-outline" />
-          <Text>Remove: {remove ? 'ON' : 'OFF'}</Text>
-        </Button>
+        <>
+          <Button success style={styles.editingButton} onPress={toggleEditing}>
+            <Icon type="Ionicons" name="checkmark-outline" />
+            <Text>Finish Editing</Text>
+          </Button>
+          <Button danger = {remove} warning = {!remove} style={styles.removeButton} onPress={toggleRemove}>
+            <Icon type="Ionicons" name="trash-outline" />
+            <Text>Remove Pin: {remove ? 'ON' : 'OFF'}</Text>
+          </Button>
+        </>
       ) : (
-        <></>
+        <Button success style={styles.editingButton} onPress={toggleEditing}>
+          <Icon type="Ionicons" name="golf-outline" />
+          <Text>Start Editing</Text>
+        </Button>
       )}
     </>
   );
@@ -135,6 +130,12 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  editingButton: {
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
+  },
+  removeButton: {position: 'absolute', bottom: 5, left: 5},
 });
 
 export default App;
